@@ -10,6 +10,7 @@
 #include "hardware/gpio.h"
 #include "hardware/timer.h"
 #include "hardware/irq.h"
+#include <inttypes.h> // Essencial para PRIu32
 
 int const LED = 5;
 int const BTN = 28;
@@ -47,8 +48,8 @@ int main() {
     gpio_set_irq_enabled_with_callback(
     BTN, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &btn_callback);
 
-    uint32_t start_ms;
-    uint32_t end_ms;
+    uint64_t start_us;
+    uint64_t end_us;
     
     int status_led = 0;
 
@@ -59,13 +60,14 @@ int main() {
             status_led = 0;
             gpio_put(LED, status_led);
 
-            start_ms = to_ms_since_boot(get_absolute_time());
+            start_us = to_us_since_boot(get_absolute_time());
 
             btn_flag = 0;
+            rep_flag  = 0;
         }
         else if(btn_flag ==2){
-            end_ms = to_ms_since_boot(get_absolute_time());
-            uint32_t intervalo = end_ms - start_ms;
+            end_us = to_us_since_boot(get_absolute_time());
+            uint64_t intervalo = end_us - start_us;
             
             
             add_repeating_timer_ms(intervalo, timer_0_callback, NULL, &timer_0);
