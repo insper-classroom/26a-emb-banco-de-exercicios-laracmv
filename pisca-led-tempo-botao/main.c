@@ -15,7 +15,7 @@ int const LED = 5;
 int const BTN = 28;
 
 volatile int btn_flag;
-volatile bool rep_flag = false;
+volatile int rep_flag = 0;
 
 void btn_callback(uint gpio, uint32_t events) {
   if (events == 0x4) { // fall edge
@@ -60,20 +60,25 @@ int main() {
             gpio_put(LED, status_led);
 
             start_ms = to_ms_since_boot(get_absolute_time());
+
+            btn_flag = 0;
         }
         else if(btn_flag ==2){
             end_ms = to_ms_since_boot(get_absolute_time());
             uint32_t intervalo = end_ms - start_ms;
             
-
+            
             add_repeating_timer_ms(intervalo, timer_0_callback, NULL, &timer_0);
+
+            btn_flag = 0;
         }
 
         if (rep_flag){
-            
+          
             status_led = !status_led;
-            rep_flag = 0;
             gpio_put(LED, status_led);
+
+            rep_flag = 0;
         }
 
     }
