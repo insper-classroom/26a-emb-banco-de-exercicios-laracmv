@@ -52,25 +52,30 @@ int main() {
     uint64_t end_us;
     
     int status_led = 0;
+    bool timer_ativo = false;
 
     while (true) {
-        if (btn_flag ==1){ //btn apertado
-            
+        if (btn_flag == 1) { // btn apertado
+    
+        if (timer_ativo) {
             cancel_repeating_timer(&timer_0);
-            status_led = 0;
-            gpio_put(LED, status_led);
-
-            start_us = to_us_since_boot(get_absolute_time());
-
-            btn_flag = 0;
-            rep_flag  = 0;
+            timer_ativo = false;
         }
-        else if(btn_flag ==2){
+
+        status_led = 0;
+        gpio_put(LED, status_led);
+
+        start_us = to_us_since_boot(get_absolute_time());
+
+        btn_flag = 0;
+        rep_flag = 0;
+}
+        else if (btn_flag == 2) {
             end_us = to_us_since_boot(get_absolute_time());
             uint64_t intervalo = end_us - start_us;
-            
-            
+
             add_repeating_timer_us(intervalo / 2, timer_0_callback, NULL, &timer_0);
+            timer_ativo = true;
 
             btn_flag = 0;
         }
