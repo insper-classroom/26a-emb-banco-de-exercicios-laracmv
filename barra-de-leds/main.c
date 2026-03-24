@@ -67,10 +67,16 @@ void bar_init(){ //inicializa pinos
 int estado_leds = 0;
 int i_leds = 0;
 
-void bar_display(int val){ //preenche leds da barra
-
-    gpio_put(LEDS[val], estado_leds);
-
+void bar_display(int val){
+    int i;
+    for (i = 0; i < 5; i++){
+        if (i < val){
+            gpio_put(LEDS[i], 1);
+        }
+        else{
+            gpio_put(LEDS[i], 0);
+        }
+    }
 }
 
 
@@ -86,45 +92,21 @@ int main() {
     
     while (true) {
     
-        if (btn_flag && switch_flag){ //decrementa
-            printf("BOTÃO APERTADO, SWITCH EM %d \n", switch_flag);
-
-            estado_leds = 0;
-            printf("O estado é %d\n", estado_leds);
-
-            printf("O incrementador dos leds é: %d\n", i_leds);
-            bar_display(i_leds);
-
-            if (i_leds > 0 ){
+        if (btn_flag && switch_flag){ // decrementa
+            if (i_leds > 0){
                 i_leds--;
-            }   
-            else {
-                i_leds = 0;
             }
-            
 
-            
-
+            bar_display(i_leds);
             btn_flag = 0;
         }
-        else if (btn_flag && !switch_flag){ //incrementa
-            printf("BOTÃO APERTADO, SWITCH EM %d \n", switch_flag);
-
-            estado_leds = 1;
-            printf("O estado é %d\n", estado_leds);
-
-            printf("O incrementador dos leds é: %d\n", i_leds);
-            bar_display(i_leds);
-
-            if (i_leds < 4){
+        
+        else if (btn_flag && !switch_flag){ // incrementa
+            if (i_leds < 5){
                 i_leds++;
             }
-            else{
-                i_leds = 4;
-            }
-            
-            
 
+            bar_display(i_leds);
             btn_flag = 0;
         }
 
