@@ -56,6 +56,9 @@ int main() {
         if (btn_flag ==1){ //btn apertado
             
             cancel_repeating_timer(&timer_0);
+            status_led = 0;
+            gpio_put(LED, status_led);
+
             start_ms = to_ms_since_boot(get_absolute_time());
         }
         else if(btn_flag ==2){
