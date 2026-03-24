@@ -70,7 +70,7 @@ int main() {
             uint64_t intervalo = end_us - start_us;
             
             
-            add_repeating_timer_us(intervalo, timer_0_callback, NULL, &timer_0);
+            add_repeating_timer_us(intervalo / 2, timer_0_callback, NULL, &timer_0);
 
             btn_flag = 0;
         }
